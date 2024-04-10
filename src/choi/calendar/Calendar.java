@@ -21,7 +21,7 @@ public class Calendar {
 //			return 28;
 //		}
 //		return 31;
-		return MAX_DAYS[month-1];
+		return MAX_DAYS[month - 1];
 	}
 
 	public void printSampleCalendar() {
@@ -37,15 +37,25 @@ public class Calendar {
 
 		// 숫자를 입력받아 입력받은 월의 최대 일수을 출력하는 프로그램
 		// 입력받은 달의 최대 일수 출력하기
+		String PROMPT = "cal>";
 		Scanner scanner = new Scanner(System.in);
 		Calendar cal = new Calendar();
-		
+
 		System.out.println("반복횟수를 입력하세요.");
-		int repeat = scanner.nextInt();
-		for (int i = 0; i < repeat;i++) {
+
+		int month = 1;
+
+		while (true) {
 			System.out.println("달을 입력하세요");
-			int month = scanner.nextInt();
-			//cal.printSampleCalendar();
+			System.out.print(PROMPT);
+			month = scanner.nextInt();
+			// cal.printSampleCalendar();
+			if (month == -1) {
+				break;
+			}
+			if(month > 12) {
+				continue;
+			}
 			System.out.printf("%d월은 %d일까지 있습니다.\n", month, cal.getmaxDaysOfMonth(month));
 		}
 		System.out.println("bye");
