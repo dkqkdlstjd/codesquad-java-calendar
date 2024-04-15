@@ -2,8 +2,12 @@ package choi.calendar;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 
 public class Calendar {
 
@@ -11,10 +15,12 @@ public class Calendar {
 
 	private final int[] LEAP_MAX_DAYS = { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-	private HashMap<Date, String> planMap;
+	private final String SAVE_FILE="calendar.dat";
+	
+	private HashMap<Date, PlanItem> planMap;
 
 	public Calendar() {
-		planMap = new HashMap<Date, String>();
+		planMap = new HashMap<Date, PlanItem>();
 	}
 
 	/**
@@ -24,14 +30,31 @@ public class Calendar {
 	 * @throws ParseException
 	 */
 	public void registerPlan(String strDate, String plan) throws ParseException {
-		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
-		planMap.put(date, plan);
+		PlanItem p = new PlanItem(strDate, plan);
+		planMap.put(p.getDate(), p);
+		
+		File f = new File(SAVE_FILE);
+		String item = p.saveString();
+		try {
+			FileWriter fw = new FileWriter(f);
+			fw.write(item);
+			fw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 
-	public String searchPlan(String strDate) throws ParseException {
-		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
-		String plan = planMap.get(date);
-		return plan;
+	public PlanItem searchPlan(String strDate){
+	    Date date = PlanItem.getDatefromString(strDate);
+	    for (PlanItem item : planMap.values()) {
+	        if (item.getDate().equals(date)) {
+	            return item;
+	        }
+	    }
+	    return null;
 	}
 
 	public boolean isLeapYear(int year) {
