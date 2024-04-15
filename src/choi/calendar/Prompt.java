@@ -21,23 +21,25 @@ public class Prompt {
 	 * @return 0~6 (0 = Sunday, saturday=6)
 	 */
 	public int parseDay(String week) {
-		if (week.equals("su")) {
+		switch (week) {
+		case "su":
 			return 0;
-		} else if (week.equals("mo")) {
+		case "mo":
 			return 1;
-		} else if (week.equals("tu")) {
+		case "tu":
 			return 2;
-		} else if (week.equals("wd")) {
+		case "we":
 			return 3;
-		} else if (week.equals("th")) {
+		case "th":
 			return 4;
-		} else if (week.equals("fr")) {
+		case "fr":
 			return 5;
-		} else if (week.equals("sa")) {
+		case "sa":
 			return 6;
-		} else {
+		default:
 			return 0;
 		}
+
 	}
 
 	public void runprompt() throws ParseException {
@@ -48,20 +50,32 @@ public class Prompt {
 		while (true) {
 			System.out.println("명령(1, 2, 3, h, q)");
 			String cmd = scanner.next();
-			if (cmd.equals("1")) {
-				cmdRegister(scanner, cal);
-			} else if (cmd.equals("2")) {
-				cmdSearch(scanner, cal);
-			} else if (cmd.equals("3")) {
-				cmdCal(scanner, cal);
-			} else if (cmd.equals("h")) {
-				printMenu();
-			} else {
-				break;
+
+			boolean isLoop = true;
+			while (isLoop) {
+				switch (cmd) {
+				case "1":
+					cmdRegister(scanner, cal);
+					break;
+				case "2":
+					cmdSearch(scanner, cal);
+					break;
+				case "3":
+					cmdCal(scanner, cal);
+					break;
+				case "4":
+					printMenu();
+					break;
+				case "h":
+					break;
+				case "q":
+					isLoop = false;
+					break;
+				}
 			}
+			System.out.println("Thank you. bye");
+			scanner.close();
 		}
-		System.out.println("Thank you. bye");
-		scanner.close();
 	}
 
 	private void cmdCal(Scanner s, Calendar c) {
@@ -89,7 +103,7 @@ public class Prompt {
 		System.out.println("[일정 검색]");
 		System.out.println("날짜를 입력해 주세요(yyyy-MM-dd).");
 		String date = s.next();
-		String plan=" ";
+		String plan = " ";
 		try {
 			plan = c.searchPlan(date);
 		} catch (ParseException e) {
@@ -105,12 +119,12 @@ public class Prompt {
 		System.out.println("[새 일정 등록]");
 		System.out.println("날짜를 입력해 주세요(yyyy-MM-dd).");
 		String date = scanner.next();
-		String text ="";
+		String text = "";
 		System.out.println("일정을 입력해 주세요.(문장의 끝에;을 입력해 주세요)");
 		while (true) {
 			String word = scanner.next();
-			text +=word +" ";
-			if(word.endsWith(";")) {
+			text += word + " ";
+			if (word.endsWith(";")) {
 				break;
 			}
 		}
